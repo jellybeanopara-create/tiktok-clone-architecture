@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
-import { useState, createContext, useContext } from 'react'
+import { useState } from 'react'
+import { AuthContext } from './context/AuthContext'
 import { PostsProvider } from './context/PostsContext'
 import BottomNav from './components/BottomNav'
 import Login from './screens/Login'
@@ -13,9 +14,6 @@ import Profile from './screens/Profile'
 import Settings from './screens/Settings'
 import AccountChannel from './screens/AccountChannel'
 import AdminDashboard from './screens/AdminDashboard'
-
-const AuthContext = createContext(null)
-export const useAuth = () => useContext(AuthContext)
 
 const NAV_SCREENS = ['/home', '/discover', '/create', '/gym', '/messages', '/profile']
 
