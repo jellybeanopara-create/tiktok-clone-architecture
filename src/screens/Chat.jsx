@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { messageThreads, chatMessages } from '../data/mockData'
+import { useToast } from '../context/ToastContext'
 
 export default function Chat() {
   const { id } = useParams()
@@ -9,6 +10,7 @@ export default function Chat() {
   const initialMsgs = chatMessages[thread.id] || []
   const [messages, setMessages] = useState(initialMsgs)
   const [input, setInput] = useState('')
+  const { show } = useToast()
 
   const send = () => {
     if (!input.trim()) return
@@ -25,7 +27,7 @@ export default function Chat() {
           {thread.name.startsWith('@') ? '\uD83C\uDF0D' : '\uD83D\uDC65'}
         </div>
         <span style={{ fontWeight: 600, fontSize: 16, flex: 1 }}>{thread.name}</span>
-        <button style={{ fontSize: 22 }}>{'\uD83D\uDCF9'}</button>
+        <button onClick={() => show('Video calls coming soon')} style={{ fontSize: 22 }}>{'\uD83D\uDCF9'}</button>
       </div>
 
       {/* Messages */}
@@ -41,7 +43,7 @@ export default function Chat() {
               fontSize: 14, lineHeight: 1.4,
             }}>
               {msg.type === 'link' ? (
-                <span style={{ color: '#8ab4ff', textDecoration: 'underline' }}>{msg.text}</span>
+                <a href={msg.text} target="_blank" rel="noreferrer" style={{ color: '#8ab4ff', textDecoration: 'underline' }}>{msg.text}</a>
               ) : msg.text}
             </div>
           </div>
@@ -50,7 +52,7 @@ export default function Chat() {
 
       {/* Input bar */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 12px', borderTop: '1px solid #1a1a1a' }}>
-        <button style={{ fontSize: 22, padding: 4 }}>{'\uD83D\uDDBC'}</button>
+        <button onClick={() => show('File sharing coming soon')} style={{ fontSize: 22, padding: 4 }}>{'\uD83D\uDDBC'}</button>
         <input
           value={input}
           onChange={e => setInput(e.target.value)}

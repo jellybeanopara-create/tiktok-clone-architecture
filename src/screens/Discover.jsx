@@ -1,10 +1,24 @@
 import { useState } from 'react'
 import { discoverPlaces } from '../data/mockData'
+import { useToast } from '../context/ToastContext'
 
 const filters = ['Trending', 'Nearby', 'Adventure', 'Nature', 'Maps']
 
 export default function Discover() {
   const [activeFilter, setActiveFilter] = useState('Trending')
+  const [query, setQuery] = useState('')
+  const { show } = useToast()
+
+  const filtered = discoverPlaces.filter(p => {
+    const matchesQuery = !query ||
+      p.name.toLowerCase().includes(query.toLowerCase()) ||
+      p.location.toLowerCase().includes(query.toLowerCase())
+    const matchesFilter = activeFilter === 'Trending' || activeFilter === 'Nearby' ||
+      (activeFilter === 'Adventure' && (p.tag === 'Trending' || p.name.includes('Peak') || p.name.includes('Canyon'))) ||
+      (activeFilter === 'Nature' && (p.name.includes('Coast') || p.name.includes('Lake') || p.name.includes('Glacier'))) ||
+      (activeFilter === 'Maps' && (p.name.includes('Trail') || p.name.includes('Route')))
+    return matchesQuery && matchesFilter
+  })
 
   return (
     <div className="screen safe-top" style={{ background: '#000', padding: '0 0 60px' }}>
@@ -15,7 +29,12 @@ export default function Discover() {
           background: '#1E1E1E', borderRadius: 25, padding: '12px 16px',
         }}>
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#707070" strokeWidth="2"><circle cx="11" cy="11" r="7" /><path d="M21 21l-4-4" strokeLinecap="round" /></svg>
-          <input placeholder="Search trails, places, people..." style={{ background: 'none', border: 'none', color: '#fff', fontSize: 14, outline: 'none', flex: 1 }} />
+          <input
+            value={query}
+            onChange={e => setQuery(e.target.value)}
+            placeholder="Search trails, places, people..."
+            style={{ background: 'none', border: 'none', color: '#fff', fontSize: 14, outline: 'none', flex: 1 }}
+          />
         </div>
       </div>
 
@@ -44,13 +63,18 @@ export default function Discover() {
         display: 'grid', gridTemplateColumns: '1fr 1fr',
         gap: 12, padding: '0 16px 20px',
       }}>
-        {discoverPlaces.map(place => (
-          <div key={place.id} style={{
-            borderRadius: 14, overflow: 'hidden',
-            background: place.gradient,
-            aspectRatio: '0.75',
-            position: 'relative',
-          }}>
+        {filtered.map(place => (
+          <div
+            key={place.id}
+            onClick={() => show(`Opening ${place.name}...`)}
+            style={{
+              borderRadius: 14, overflow: 'hidden',
+              background: place.gradient,
+              aspectRatio: '0.75',
+              position: 'relative',
+              cursor: 'pointer',
+            }}
+          >
             {/* Badge */}
             <div style={{
               position: 'absolute', top: 10, left: 10,
@@ -77,6 +101,9 @@ export default function Discover() {
             </div>
           </div>
         ))}
+        {filtered.length === 0 && (
+          <div style={{ gridColumn: '1/3', textAlign: 'center', color: '#707070', fontSize: 14, padding: 40 }}>No places found</div>
+        )}
       </div>
     </div>
   )

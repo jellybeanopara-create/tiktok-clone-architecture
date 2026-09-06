@@ -1,8 +1,10 @@
 import { useState } from 'react'
 import { workouts, gifts, currentUser } from '../data/mockData'
+import { useToast } from '../context/ToastContext'
 
 export default function Gym() {
   const [subscribed, setSubscribed] = useState(false)
+  const { show } = useToast()
 
   if (!subscribed) {
     return (
@@ -31,7 +33,7 @@ export default function Gym() {
       </div>
 
       {workouts.map(w => (
-        <div key={w.id} style={{ margin: '8px 16px', background: '#1E1E1E', borderRadius: 14, overflow: 'hidden' }}>
+        <div key={w.id} onClick={() => show(`Starting: ${w.title}`)} style={{ margin: '8px 16px', background: '#1E1E1E', borderRadius: 14, overflow: 'hidden', cursor: 'pointer' }}>
           <div style={{
             height: 160, background: 'linear-gradient(135deg, #2a2a2a, #1a1a1a)',
             display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 40, opacity: 0.4,

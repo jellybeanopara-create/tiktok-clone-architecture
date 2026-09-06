@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import { useToast } from '../context/ToastContext'
 import Logo from '../components/Logo'
 
 export default function Login() {
@@ -9,12 +10,18 @@ export default function Login() {
   const [error, setError] = useState('')
   const { setAuthed } = useAuth()
   const navigate = useNavigate()
+  const { show } = useToast()
 
   const handleLogin = () => {
     if (!email || !password) {
       setError('Please enter your email and password.')
       return
     }
+    setAuthed(true)
+    navigate('/home')
+  }
+
+  const socialLogin = () => {
     setAuthed(true)
     navigate('/home')
   }
@@ -46,11 +53,11 @@ export default function Login() {
 
       <button onClick={handleLogin} style={loginBtnStyle}>Log in</button>
 
-      <button style={{ color: '#fff', fontSize: 14, background: 'none', padding: '4px' }}>Forgot password?</button>
+      <button onClick={() => show('Password reset link sent to your email')} style={{ color: '#fff', fontSize: 14, background: 'none', padding: '4px' }}>Forgot password?</button>
 
-      <button style={outlineBtnStyle}>Create new account</button>
-      <button style={outlineBtnStyle}>Sign up with Apple ID</button>
-      <button style={outlineBtnStyle}>Continue with Google</button>
+      <button onClick={() => show('Sign up coming soon!')} style={outlineBtnStyle}>Create new account</button>
+      <button onClick={socialLogin} style={outlineBtnStyle}>Sign up with Apple ID</button>
+      <button onClick={socialLogin} style={outlineBtnStyle}>Continue with Google</button>
 
       <div style={{ flex: 1 }} />
       <Logo size={20} showText />

@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { usePosts } from '../context/PostsContext'
+import { useToast } from '../context/ToastContext'
 
 export default function Create() {
   const [tab, setTab] = useState(1) // 0=Photo, 1=Video, 2=Live
@@ -8,6 +9,7 @@ export default function Create() {
   const [caption, setCaption] = useState('')
   const navigate = useNavigate()
   const { addPost } = usePosts()
+  const { show } = useToast()
   const fileInputRef = useRef(null)
   const tabs = ['Photo', 'Video', 'Live']
 
@@ -115,11 +117,12 @@ export default function Create() {
             }}>{'\uD83D\uDDBC'}</div>
 
           {/* Record button */}
-          <div style={{
+          <div onClick={() => show('Camera recording coming soon — use gallery to upload')} style={{
             width: 72, height: 72, borderRadius: '50%',
             border: `4px solid ${tab === 2 ? '#FF3B30' : '#fff'}`,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             boxShadow: tab === 2 ? '0 0 20px rgba(255,59,48,0.4)' : 'none',
+            cursor: 'pointer',
           }}>
             <div style={{
               width: 56, height: 56, borderRadius: '50%',
@@ -128,16 +131,16 @@ export default function Create() {
           </div>
 
           {/* Effects */}
-          <div style={{
+          <div onClick={() => show('Effects coming soon')} style={{
             width: 48, height: 48, borderRadius: 10,
             border: '1px solid #444', background: '#1E1E1E',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontSize: 20,
+            fontSize: 20, cursor: 'pointer',
           }}>{'\u2728'}</div>
         </div>
 
         {/* Add sound */}
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 6, fontSize: 13, color: '#fff' }}>
+        <div onClick={() => show('Sound library coming soon')} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 6, fontSize: 13, color: '#fff', cursor: 'pointer' }}>
           <span>{'\u266A'}</span>
           <span>Add sound</span>
         </div>

@@ -1,7 +1,9 @@
 import { useNavigate } from 'react-router-dom'
+import { useToast } from '../context/ToastContext'
 
 export default function AccountChannel() {
   const navigate = useNavigate()
+  const { show } = useToast()
 
   return (
     <div className="screen safe-top" style={{ background: '#000', paddingBottom: 80 }}>
@@ -18,7 +20,7 @@ export default function AccountChannel() {
           <div style={{ fontWeight: 700, fontSize: 16 }}>@veltorix</div>
           <div style={{ fontSize: 13, color: '#A0A0A0', marginTop: 2 }}>Personal Account</div>
         </div>
-        <button style={{ padding: '6px 18px', borderRadius: 20, border: '1px solid #555', color: '#fff', fontSize: 13, background: 'none' }}>Edit</button>
+        <button onClick={() => navigate('/settings')} style={{ padding: '6px 18px', borderRadius: 20, border: '1px solid #555', color: '#fff', fontSize: 13, background: 'none' }}>Edit</button>
       </div>
 
       {/* Channel card */}
@@ -31,12 +33,12 @@ export default function AccountChannel() {
             <span>{'\uD83D\uDC65'}</span> 12.4K followers
           </div>
         </div>
-        <button style={{ padding: '6px 14px', borderRadius: 20, border: '1px solid #555', color: '#fff', fontSize: 13, background: 'none', whiteSpace: 'nowrap' }}>Manage Channel</button>
+        <button onClick={() => show('Channel management coming soon')} style={{ padding: '6px 14px', borderRadius: 20, border: '1px solid #555', color: '#fff', fontSize: 13, background: 'none', whiteSpace: 'nowrap' }}>Manage Channel</button>
       </div>
 
       {/* New section */}
       <div style={{ fontSize: 12, fontWeight: 600, color: '#707070', padding: '8px 16px', letterSpacing: 0.5 }}>NEW</div>
-      <div style={{ margin: '0 16px', background: '#1E1E1E', borderRadius: 16, padding: 16, display: 'flex', alignItems: 'center', gap: 14, cursor: 'pointer' }}>
+      <div onClick={() => show('Channel creation coming soon')} style={{ margin: '0 16px', background: '#1E1E1E', borderRadius: 16, padding: 16, display: 'flex', alignItems: 'center', gap: 14, cursor: 'pointer' }}>
         <div style={{ width: 44, height: 44, borderRadius: '50%', border: '2px solid #fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20 }}>+</div>
         <span style={{ fontSize: 15, fontWeight: 500 }}>Create new Channel</span>
       </div>

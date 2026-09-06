@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { usePosts } from '../context/PostsContext'
 import Logo from '../components/Logo'
 
@@ -6,6 +7,7 @@ export default function HomeFeed() {
   const [tab, setTab] = useState(0)
   const [liked, setLiked] = useState({})
   const { posts } = usePosts()
+  const navigate = useNavigate()
 
   const toggleLike = id => setLiked(p => ({ ...p, [id]: !p[id] }))
 
@@ -24,7 +26,7 @@ export default function HomeFeed() {
           <span style={{ color: '#555' }}>|</span>
           <button onClick={() => setTab(1)} style={tabStyle(tab === 1)}>Following</button>
         </div>
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2"><circle cx="11" cy="11" r="7" /><path d="M21 21l-4-4" strokeLinecap="round" /></svg>
+        <svg onClick={() => navigate('/discover')} width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" style={{ cursor: 'pointer' }}><circle cx="11" cy="11" r="7" /><path d="M21 21l-4-4" strokeLinecap="round" /></svg>
       </div>
 
       {posts.map(video => (

@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-route
 import { useState } from 'react'
 import { AuthContext } from './context/AuthContext'
 import { PostsProvider } from './context/PostsContext'
+import { ToastProvider } from './context/ToastContext'
 import BottomNav from './components/BottomNav'
 import Login from './screens/Login'
 import HomeFeed from './screens/HomeFeed'
@@ -25,6 +26,7 @@ function AppInner() {
   return (
     <AuthContext.Provider value={{ authed, setAuthed }}>
       <PostsProvider>
+       <ToastProvider>
         <div className="app-container">
           <div className="phone-frame">
             <Routes>
@@ -44,6 +46,7 @@ function AppInner() {
             {showNav && <BottomNav />}
           </div>
         </div>
+       </ToastProvider>
       </PostsProvider>
     </AuthContext.Provider>
   )

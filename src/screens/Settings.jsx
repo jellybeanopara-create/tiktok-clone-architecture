@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useToast } from '../context/ToastContext'
 
 const sections = [
   {
@@ -13,32 +14,34 @@ const sections = [
   {
     title: 'PREFERENCES',
     items: [
-      { icon: '\uD83D\uDD14', label: 'Notifications' },
-      { icon: '\uD83D\uDEE1', label: 'Privacy' },
-      { icon: '\uD83C\uDF0D', label: 'Language' },
+      { icon: '\uD83D\uDD14', label: 'Notifications', toast: 'No new notifications' },
+      { icon: '\uD83D\uDEE1', label: 'Privacy', toast: 'Privacy settings coming soon' },
+      { icon: '\uD83C\uDF0D', label: 'Language', toast: 'Language settings coming soon' },
       { icon: '\uD83C\uDF19', label: 'Dark Mode', toggle: true },
     ],
   },
   {
     title: 'CONTENT',
     items: [
-      { icon: '\uD83D\uDDBC', label: 'Download Quality' },
-      { icon: '\uD83C\uDF3F', label: 'Data Saver' },
-      { icon: '\uD83D\uDDD1', label: 'Clear Cache' },
+      { icon: '\uD83D\uDDBC', label: 'Download Quality', toast: 'Download quality settings coming soon' },
+      { icon: '\uD83C\uDF3F', label: 'Data Saver', toast: 'Data saver is enabled' },
+      { icon: '\uD83D\uDDD1', label: 'Clear Cache', toast: 'Cache cleared successfully' },
     ],
   },
   {
     title: 'SUPPORT',
     items: [
-      { icon: '\u2753', label: 'Help Center' },
-      { icon: '\u26A0\uFE0F', label: 'Report a Problem' },
-      { icon: '\u2139\uFE0F', label: 'About' },
+      { icon: '\u2753', label: 'Help Center', toast: 'Help Center coming soon' },
+      { icon: '\u26A0\uFE0F', label: 'Report a Problem', toast: 'Report form coming soon' },
+      { icon: '\u2139\uFE0F', label: 'About', toast: 'Veltorix v1.0.0' },
+      { icon: '\uD83D\uDCBB', label: 'Admin Dashboard', to: '/admin' },
     ],
   },
 ]
 
 export default function Settings() {
   const navigate = useNavigate()
+  const { show } = useToast()
   const [darkMode, setDarkMode] = useState(true)
 
   return (
@@ -56,12 +59,15 @@ export default function Settings() {
             {section.items.map((item, i) => (
               <div
                 key={item.label}
-                onClick={() => item.to && navigate(item.to)}
+                onClick={() => {
+                  if (item.to) navigate(item.to)
+                  else if (item.toast) show(item.toast)
+                }}
                 style={{
                   display: 'flex', alignItems: 'center', gap: 12,
                   padding: '14px 16px',
                   borderTop: i > 0 ? '1px solid #2A2A2A' : 'none',
-                  cursor: item.to ? 'pointer' : 'default',
+                  cursor: item.to || item.toast ? 'pointer' : 'default',
                 }}
               >
                 <span style={{ fontSize: 18, width: 24, textAlign: 'center' }}>{item.icon}</span>

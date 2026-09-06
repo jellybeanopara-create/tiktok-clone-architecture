@@ -1,10 +1,12 @@
 import { useNavigate } from 'react-router-dom'
 import { usePosts } from '../context/PostsContext'
+import { useToast } from '../context/ToastContext'
 import { currentUser } from '../data/mockData'
 
 export default function Profile() {
   const navigate = useNavigate()
   const { posts } = usePosts()
+  const { show } = useToast()
   const userPosts = posts.filter(p => p.username === currentUser.username)
 
   const stats = [
@@ -50,8 +52,8 @@ export default function Profile() {
 
       {/* Action buttons */}
       <div style={{ display: 'flex', gap: 10, padding: '0 16px 20px' }}>
-        <button style={{ flex: 1, padding: '10px', borderRadius: 10, background: '#1E1E1E', color: '#fff', fontSize: 14, fontWeight: 600 }}>Edit Profile</button>
-        <button style={{ flex: 1, padding: '10px', borderRadius: 10, background: '#1E1E1E', color: '#fff', fontSize: 14, fontWeight: 600 }}>Share Profile</button>
+        <button onClick={() => navigate('/settings')} style={{ flex: 1, padding: '10px', borderRadius: 10, background: '#1E1E1E', color: '#fff', fontSize: 14, fontWeight: 600 }}>Edit Profile</button>
+        <button onClick={() => show('Profile link copied to clipboard')} style={{ flex: 1, padding: '10px', borderRadius: 10, background: '#1E1E1E', color: '#fff', fontSize: 14, fontWeight: 600 }}>Share Profile</button>
       </div>
 
       {/* Video grid */}
