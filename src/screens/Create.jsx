@@ -1,13 +1,63 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { usePosts } from '../context/PostsContext'
 
 export default function Create() {
   const [tab, setTab] = useState(1) // 0=Photo, 1=Video, 2=Live
+  const [videoUrl, setVideoUrl] = useState(null)
+  const [caption, setCaption] = useState('')
   const navigate = useNavigate()
+  const { addPost } = usePosts()
+  const fileInputRef = useRef(null)
   const tabs = ['Photo', 'Video', 'Live']
 
+  const handleFileSelect = (e) => {
+    const file = e.target.files[0]
+    if (file) {
+      setVideoUrl(URL.createObjectURL(file))
+    }
+  }
+
+  const handlePost = () => {
+    addPost(caption, videoUrl)
+    navigate('/home')
+  }
+
+  // Upload / caption screen when a file is selected
+  if (videoUrl) {
+    return (
+      <div className="screen" style={{ background: '#000', display: 'flex', flexDirection: 'column' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 16px' }}>
+          <button onClick={() => { setVideoUrl(null); setCaption('') }} style={{ fontSize: 22, color: '#fff' }}>{'\u2715'}</button>
+          <span style={{ fontWeight: 600, fontSize: 17 }}>New Post</span>
+          <button onClick={handlePost} style={{ color: '#3B82F6', fontWeight: 700, fontSize: 16 }}>Post</button>
+        </div>
+
+        <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16 }}>
+          <video src={videoUrl} controls playsInline style={{ maxWidth: '100%', maxHeight: '100%', borderRadius: 12 }} />
+        </div>
+
+        <div style={{ padding: 16, borderTop: '1px solid #1a1a1a' }}>
+          <textarea
+            value={caption}
+            onChange={e => setCaption(e.target.value)}
+            placeholder="Write a caption..."
+            style={{
+              width: '100%', minHeight: 80, padding: '12px 16px',
+              borderRadius: 12, background: '#1E1E1E', border: '1px solid #333',
+              color: '#fff', fontSize: 15, outline: 'none', resize: 'none',
+            }}
+          />
+        </div>
+      </div>
+    )
+  }
+
+  // Default camera screen
   return (
     <div className="screen" style={{ background: '#000', display: 'flex', flexDirection: 'column' }}>
+      <input ref={fileInputRef} type="file" accept="video/*" style={{ display: 'none' }} onChange={handleFileSelect} />
+
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 16px' }}>
         <button onClick={() => navigate('/home')} style={{ fontSize: 22, color: '#fff' }}>{'\u2715'}</button>
@@ -54,13 +104,15 @@ export default function Create() {
       {/* Bottom controls */}
       <div style={{ padding: '8px 16px 20px' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around', marginBottom: 20 }}>
-          {/* Gallery */}
-          <div style={{
-            width: 48, height: 48, borderRadius: 10,
-            border: '1px solid #444', background: '#1E1E1E',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontSize: 20,
-          }}>{'\uD83D\uDDBC'}</div>
+          {/* Gallery - triggers file picker */}
+          <div
+            onClick={() => fileInputRef.current?.click()}
+            style={{
+              width: 48, height: 48, borderRadius: 10,
+              border: '1px solid #444', background: '#1E1E1E',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: 20, cursor: 'pointer',
+            }}>{'\uD83D\uDDBC'}</div>
 
           {/* Record button */}
           <div style={{

@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { useState, createContext, useContext } from 'react'
+import { PostsProvider } from './context/PostsContext'
 import BottomNav from './components/BottomNav'
 import Login from './screens/Login'
 import HomeFeed from './screens/HomeFeed'
@@ -25,25 +26,27 @@ function AppInner() {
 
   return (
     <AuthContext.Provider value={{ authed, setAuthed }}>
-      <div className="app-container">
-        <div className="phone-frame">
-          <Routes>
-            <Route path="/" element={authed ? <Navigate to="/home" /> : <Login />} />
-            <Route path="/home" element={<HomeFeed />} />
-            <Route path="/discover" element={<Discover />} />
-            <Route path="/create" element={<Create />} />
-            <Route path="/gym" element={<Gym />} />
-            <Route path="/messages" element={<Messages />} />
-            <Route path="/messages/:id" element={<Chat />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/settings" element={<Settings />} />
-            <Route path="/account" element={<AccountChannel />} />
-            <Route path="/admin" element={<AdminDashboard />} />
-            <Route path="*" element={<Navigate to="/" />} />
-          </Routes>
-          {showNav && <BottomNav />}
+      <PostsProvider>
+        <div className="app-container">
+          <div className="phone-frame">
+            <Routes>
+              <Route path="/" element={authed ? <Navigate to="/home" /> : <Login />} />
+              <Route path="/home" element={<HomeFeed />} />
+              <Route path="/discover" element={<Discover />} />
+              <Route path="/create" element={<Create />} />
+              <Route path="/gym" element={<Gym />} />
+              <Route path="/messages" element={<Messages />} />
+              <Route path="/messages/:id" element={<Chat />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/settings" element={<Settings />} />
+              <Route path="/account" element={<AccountChannel />} />
+              <Route path="/admin" element={<AdminDashboard />} />
+              <Route path="*" element={<Navigate to="/" />} />
+            </Routes>
+            {showNav && <BottomNav />}
+          </div>
         </div>
-      </div>
+      </PostsProvider>
     </AuthContext.Provider>
   )
 }

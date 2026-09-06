@@ -1,13 +1,17 @@
 import { useNavigate } from 'react-router-dom'
-import { currentUser, profileVideos } from '../data/mockData'
+import { usePosts } from '../context/PostsContext'
+import { currentUser } from '../data/mockData'
 
 export default function Profile() {
   const navigate = useNavigate()
+  const { posts } = usePosts()
+  const userPosts = posts.filter(p => p.username === currentUser.username)
+
   const stats = [
     { value: '128', label: 'Following' },
     { value: '2.4K', label: 'Followers' },
-    { value: '24', label: 'Posts' },
-    { value: '18', label: 'Videos' },
+    { value: String(userPosts.length), label: 'Posts' },
+    { value: String(userPosts.filter(p => p.mediaType === 'video').length), label: 'Videos' },
     { value: '156', label: 'Likes' },
     { value: '7.2K', label: 'Views' },
   ]
@@ -52,13 +56,16 @@ export default function Profile() {
 
       {/* Video grid */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 3, padding: '0 3px' }}>
-        {profileVideos.map(v => (
+        {userPosts.map(v => (
           <div key={v.id} style={{
             aspectRatio: '1', borderRadius: 4, overflow: 'hidden',
             background: v.gradient, position: 'relative',
           }}>
+            {v.videoUrl && (
+              <video src={v.videoUrl} playsInline muted style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            )}
             <div style={{ position: 'absolute', bottom: 4, left: 4, fontSize: 11, color: '#fff' }}>
-              {v.type === 'video' ? '\u25B6' : '\uD83D\uDDBC'}
+              {v.mediaType === 'video' ? '\u25B6' : '\uD83D\uDDBC'}
             </div>
             <div style={{ position: 'absolute', bottom: 4, right: 4, fontSize: 10, color: '#fff' }}>{v.duration}</div>
           </div>

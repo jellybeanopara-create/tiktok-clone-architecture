@@ -1,10 +1,11 @@
 import { useState } from 'react'
-import { feedVideos } from '../data/mockData'
+import { usePosts } from '../context/PostsContext'
 import Logo from '../components/Logo'
 
 export default function HomeFeed() {
   const [tab, setTab] = useState(0)
   const [liked, setLiked] = useState({})
+  const { posts } = usePosts()
 
   const toggleLike = id => setLiked(p => ({ ...p, [id]: !p[id] }))
 
@@ -26,7 +27,7 @@ export default function HomeFeed() {
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2"><circle cx="11" cy="11" r="7" /><path d="M21 21l-4-4" strokeLinecap="round" /></svg>
       </div>
 
-      {feedVideos.map(video => (
+      {posts.map(video => (
         <div key={video.id} style={{
           height: 'calc(100vh - 60px)',
           scrollSnapAlign: 'start',
@@ -37,13 +38,25 @@ export default function HomeFeed() {
           justifyContent: 'flex-end',
           overflow: 'hidden',
         }}>
+          {/* Video preview for uploaded files */}
+          {video.videoUrl && (
+            <video
+              src={video.videoUrl}
+              playsInline
+              loop
+              autoPlay
+              muted
+              style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
+            />
+          )}
+
           {/* Watermark */}
           <div style={{ position: 'absolute', top: 60, right: 16, opacity: 0.06 }}>
             <Logo size={80} />
           </div>
 
           {/* Right action buttons */}
-          <div style={{ position: 'absolute', right: 12, bottom: 80, display: 'flex', flexDirection: 'column', gap: 20, alignItems: 'center' }}>
+          <div style={{ position: 'absolute', right: 12, bottom: 80, display: 'flex', flexDirection: 'column', gap: 20, alignItems: 'center', zIndex: 2 }}>
             <ActionButton icon={liked[video.id] ? '\u2665' : '\u2661'} count={video.likes} color={liked[video.id] ? '#FF3B30' : '#fff'} onClick={() => toggleLike(video.id)} />
             <ActionButton icon={'\uD83D\uDCAC'} count={video.comments} />
             <ActionButton icon={'\u2197'} count={video.shares} />
@@ -63,10 +76,14 @@ export default function HomeFeed() {
           }} />
 
           {/* Bottom info */}
-          <div style={{ position: 'relative', padding: '0 16px 80px 16px', maxWidth: '75%' }}>
+          <div style={{ position: 'relative', padding: '0 16px 80px 16px', maxWidth: '75%', zIndex: 2 }}>
             <div style={{ fontWeight: 700, fontSize: 17, marginBottom: 8 }}>@{video.username}</div>
-            <div style={{ fontSize: 14, color: '#ddd', marginBottom: 6, lineHeight: 1.4 }}>{video.caption}</div>
-            <div style={{ fontSize: 13, color: '#3B82F6', marginBottom: 10 }}>{video.hashtags}</div>
+            {video.caption && (
+              <div style={{ fontSize: 14, color: '#ddd', marginBottom: 6, lineHeight: 1.4 }}>{video.caption}</div>
+            )}
+            {video.hashtags && (
+              <div style={{ fontSize: 13, color: '#3B82F6', marginBottom: 10 }}>{video.hashtags}</div>
+            )}
             <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: '#ccc' }}>
               <span>{'\u266A'}</span>
               <span>{video.audio}</span>
