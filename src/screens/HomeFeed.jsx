@@ -55,8 +55,15 @@ export default function HomeFeed() {
             }} />
           </div>
 
+          {/* Dark overlay for text readability */}
+          <div style={{
+            position: 'absolute', bottom: 0, left: 0, right: 0, height: '45%',
+            background: 'linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.7) 60%, #000 100%)',
+            pointerEvents: 'none',
+          }} />
+
           {/* Bottom info */}
-          <div style={{ padding: '0 16px 80px 16px', maxWidth: '75%' }}>
+          <div style={{ position: 'relative', padding: '0 16px 80px 16px', maxWidth: '75%' }}>
             <div style={{ fontWeight: 700, fontSize: 17, marginBottom: 8 }}>@{video.username}</div>
             <div style={{ fontSize: 14, color: '#ddd', marginBottom: 6, lineHeight: 1.4 }}>{video.caption}</div>
             <div style={{ fontSize: 13, color: '#3B82F6', marginBottom: 10 }}>{video.hashtags}</div>

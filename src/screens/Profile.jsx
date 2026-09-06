@@ -24,15 +24,18 @@ export default function Profile() {
       <div style={{ textAlign: 'center', padding: '8px 16px 16px' }}>
         <div style={{
           width: 80, height: 80, borderRadius: '50%', margin: '0 auto 12px',
-          background: '#2A2A2A', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 36,
+          background: '#1E1E1E', border: '1px solid #333', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 36,
         }}>{'\uD83D\uDC64'}</div>
         <div style={{ fontWeight: 700, fontSize: 18 }}>@{currentUser.username}</div>
         <div style={{ fontSize: 15, marginTop: 2 }}>{currentUser.displayName}</div>
         <div style={{ fontSize: 13, color: '#A0A0A0', marginTop: 8, lineHeight: 1.5, padding: '0 30px' }}>{currentUser.bio}</div>
       </div>
 
-      {/* Stats */}
-      <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '8px 28px', padding: '8px 16px 16px' }}>
+      {/* Stats card */}
+      <div style={{
+        margin: '4px 16px 16px', background: '#1E1E1E', borderRadius: 14, padding: '16px 12px',
+        display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '8px 28px',
+      }}>
         {stats.map(s => (
           <div key={s.label} style={{ textAlign: 'center' }}>
             <div style={{ fontWeight: 700, fontSize: 16 }}>{s.value}</div>
